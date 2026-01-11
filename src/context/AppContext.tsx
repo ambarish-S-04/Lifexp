@@ -418,7 +418,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     // Track previous user to detect user switches
     const previousUserRef = useRef<User | null>(null);
 
-    // Auth listener - SIMPLIFIED: just load data, don't reset state first
+    // Auth listener - load data directly without reset
     useEffect(() => {
         const unsubscribe = onAuthChange(async (user) => {
             dispatch({ type: 'SET_USER', payload: user });
@@ -479,12 +479,13 @@ export function AppProvider({ children }: { children: ReactNode }) {
         return () => unsubscribe();
     }, []);
 
-    // PERIODIC SAVE: Save every 10 seconds (not on every state change)
+    // IMMEDIATE SAVE (debounced): Save on every state change like old version
     useEffect(() => {
         if (!state.user || !previousUserRef.current) return;
         if (state.user.uid !== previousUserRef.current.uid) return;
 
-        const saveInterval = setInterval(async () => {
+        // Debounce to avoid spam (500ms delay after last change)
+        const saveTimeout = setTimeout(async () => {
             if (state.user && state.isAuthenticated) {
                 await saveUserData(state.user.uid, {
                     totalXP: state.totalXP,
@@ -494,10 +495,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
                     history: state.history,
                 });
             }
-        }, 10000); // Save every 10 seconds
+        }, 500);
 
-        return () => clearInterval(saveInterval);
-    }, [state.user, state.isAuthenticated, state.totalXP, state.level, state.streak, state.sections, state.history]);
+        return () => clearTimeout(saveTimeout);
+    }, [state.totalXP, state.level, state.streak, state.sections, state.history, state.user, state.isAuthenticated]);
 
     // Check for day change and apply penalty for incomplete tasks
     useEffect(() => {
