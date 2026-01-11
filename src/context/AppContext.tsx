@@ -418,11 +418,29 @@ export function AppProvider({ children }: { children: ReactNode }) {
     // Auth listener
     useEffect(() => {
         const unsubscribe = onAuthChange(async (user) => {
+            // First, reset state to defaults when user changes (prevents data leaking between accounts)
+            dispatch({
+                type: 'SET_DATA',
+                payload: {
+                    totalXP: 0,
+                    level: 1,
+                    currentXP: 0,
+                    streak: 0,
+                    sections: DEFAULT_SECTIONS.map(s => ({
+                        ...s,
+                        tasks: s.tasks.map(t => ({ ...t, completed: false }))
+                    })),
+                    history: [],
+                    lastActiveDate: new Date().toISOString().split('T')[0],
+                },
+            });
+
             dispatch({ type: 'SET_USER', payload: user });
 
             if (user) {
                 const userData = await getUserData(user.uid);
                 if (userData) {
+                    // User has existing data - load it
                     dispatch({
                         type: 'SET_DATA',
                         payload: {
@@ -435,7 +453,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
                         },
                     });
                 }
+                // If no userData, the reset above already set clean defaults
             }
+            // If no user (logged out), the reset above already set clean defaults
         });
 
         return () => unsubscribe();
