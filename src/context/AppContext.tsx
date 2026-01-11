@@ -421,7 +421,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     // Auth listener
     useEffect(() => {
         const unsubscribe = onAuthChange(async (user) => {
-            // First, reset state to defaults when user changes (prevents data leaking between accounts)
+            // Block save effect during auth changes (MUST be first!)
+            isInitializingRef.current = true;
+
+            // Reset state to defaults when user changes (prevents data leaking between accounts)
             dispatch({
                 type: 'SET_DATA',
                 payload: {
