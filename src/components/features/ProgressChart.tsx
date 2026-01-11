@@ -34,8 +34,8 @@ export function ProgressChart({ data = [] }: ProgressChartProps) {
         for (let d = 1; d <= daysInMonth; d++) {
             const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
             const dayData = data.find(dd => dd.date === dateStr);
-            // Generate demo XP if no real data
-            const xp = dayData?.xp ?? (Math.random() > 0.35 ? Math.floor(Math.random() * 130) - 15 : 0);
+            // Use actual XP from history, or 0 if no data (fresh user gets empty chart)
+            const xp = dayData?.xp ?? 0;
 
             days.push({ day: d, date: dateStr, xp, isToday: dateStr === today });
             if (Math.abs(xp) > maxXP) maxXP = Math.abs(xp);
