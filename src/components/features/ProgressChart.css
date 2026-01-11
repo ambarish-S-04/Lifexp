@@ -1,0 +1,231 @@
+.chart-section {
+    padding: 20px;
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.chart-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.chart-icon {
+    font-size: 1.2rem;
+}
+
+.chart-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* View toggle */
+.view-toggle {
+    display: flex;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 3px;
+}
+
+.view-toggle .toggle-btn {
+    padding: 6px 10px;
+    border-radius: 6px;
+    color: var(--color-text-muted);
+    transition: all 0.2s;
+}
+
+.view-toggle .toggle-btn.active {
+    background: var(--gradient-level);
+    color: white;
+}
+
+.view-toggle .toggle-btn:not(.active):hover {
+    color: var(--color-text-primary);
+}
+
+/* Navigation */
+.chart-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.chart-nav .nav-btn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    color: var(--color-text-secondary);
+    transition: all 0.2s;
+}
+
+.chart-nav .nav-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-primary);
+}
+
+.chart-nav .month-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    min-width: 110px;
+    text-align: center;
+}
+
+/* Stats row */
+.chart-stats {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Bar Graph */
+.bar-graph {
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+}
+
+.bars-container {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    flex: 1;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bar-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.bar-wrapper.today {
+    position: relative;
+}
+
+.bar-wrapper.today::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    width: 4px;
+    height: 4px;
+    background: var(--color-gold);
+    border-radius: 50%;
+}
+
+.bar {
+    width: 100%;
+    max-width: 12px;
+    height: 100%;
+    border-radius: 3px 3px 1px 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.bar:hover {
+    transform: scaleY(1.05);
+    filter: brightness(1.2);
+}
+
+/* Bar colors matching original */
+.bar.low {
+    background: linear-gradient(180deg, rgba(139, 92, 246, 0.8) 0%, rgba(139, 92, 246, 0.5) 100%);
+}
+
+.bar.medium {
+    background: linear-gradient(180deg, rgba(249, 115, 22, 0.9) 0%, rgba(249, 115, 22, 0.6) 100%);
+}
+
+.bar.high {
+    background: linear-gradient(180deg, rgba(16, 185, 129, 1) 0%, rgba(16, 185, 129, 0.7) 100%);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+}
+
+.bar.negative {
+    background: linear-gradient(180deg, rgba(239, 68, 68, 0.8) 0%, rgba(239, 68, 68, 0.5) 100%);
+}
+
+/* Bar labels */
+.bar-labels {
+    display: flex;
+    gap: 2px;
+    padding-top: 6px;
+}
+
+.bar-label {
+    flex: 1;
+    text-align: center;
+    font-size: 0.65rem;
+    color: var(--color-text-muted);
+}
+
+/* Line Graph */
+.line-graph {
+    height: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.line-canvas {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+    .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .chart-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .chart-stats {
+        gap: 16px;
+    }
+
+    .stat-value {
+        font-size: 1.2rem;
+    }
+}

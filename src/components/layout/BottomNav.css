@@ -1,0 +1,132 @@
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    padding: 8px 16px;
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+    z-index: var(--z-fixed);
+    transition: all 0.3s ease;
+}
+
+/* Dark mode nav */
+[data-theme="dark"] .bottom-nav {
+    background: rgba(8, 12, 24, 0.92);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Light mode nav */
+[data-theme="light"] .bottom-nav {
+    background: rgba(255, 255, 255, 0.92);
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.nav-tab {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    border-radius: var(--radius-md);
+    min-width: 70px;
+}
+
+/* Active tab background - subtle, NOT covering the icon */
+.active-bg {
+    position: absolute;
+    inset: 0;
+    background: var(--theme-accent, var(--color-purple));
+    border-radius: var(--radius-md);
+    z-index: -1;
+    opacity: 0.12;
+}
+
+[data-theme="light"] .active-bg {
+    opacity: 0.15;
+}
+
+/* Icon wrapper */
+.nav-icon-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Icon styles - Default (inactive) */
+.nav-icon {
+    color: var(--color-text-muted);
+    transition: all var(--transition-fast);
+}
+
+/* Icon styles - Active: use theme accent color, NOT white */
+.nav-icon.active {
+    color: var(--theme-accent, var(--color-purple));
+}
+
+/* Icon glow effect - more subtle */
+.icon-glow {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background: radial-gradient(circle, var(--theme-accent, rgba(139, 92, 246, 0.3)) 0%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(8px);
+    z-index: -1;
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Label styles - Default (inactive) */
+.nav-label {
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    transition: all var(--transition-fast);
+}
+
+/* Label styles - Active: use theme accent color */
+.nav-label.active {
+    color: var(--theme-accent, var(--color-purple));
+    font-weight: 600;
+}
+
+/* Hover states */
+.nav-tab:hover .nav-icon:not(.active) {
+    color: var(--color-text-secondary);
+}
+
+.nav-tab:hover .nav-label:not(.active) {
+    color: var(--color-text-secondary);
+}
+
+/* Focus visible */
+.nav-tab:focus-visible {
+    outline: 2px solid var(--theme-accent, var(--color-purple));
+    outline-offset: 2px;
+}
+
+@keyframes pulse-glow {
+
+    0%,
+    100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+    }
+}

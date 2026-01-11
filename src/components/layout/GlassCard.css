@@ -1,0 +1,82 @@
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+    transition: all var(--transition-medium);
+}
+
+.glass-card-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* Hover variant */
+.glass-card.hover:hover {
+    border-color: var(--glass-border-hover);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Glow variant */
+.glass-card.glow:hover {
+    border-color: var(--glass-border-hover);
+}
+
+/* Accent bar */
+.accent-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    transition: width var(--transition-fast);
+}
+
+.glass-card:hover .accent-bar {
+    width: 6px;
+}
+
+/* Accent colors */
+.accent-purple .accent-bar {
+    background: linear-gradient(180deg, var(--color-purple) 0%, rgba(139, 92, 246, 0.3) 100%);
+}
+
+.accent-blue .accent-bar {
+    background: linear-gradient(180deg, var(--color-blue) 0%, rgba(59, 130, 246, 0.3) 100%);
+}
+
+.accent-red .accent-bar {
+    background: linear-gradient(180deg, var(--color-red) 0%, rgba(239, 68, 68, 0.3) 100%);
+}
+
+.accent-green .accent-bar {
+    background: linear-gradient(180deg, var(--color-green) 0%, rgba(16, 185, 129, 0.3) 100%);
+}
+
+.accent-gold .accent-bar {
+    background: linear-gradient(180deg, var(--color-gold) 0%, rgba(251, 191, 36, 0.3) 100%);
+}
+
+/* Top gradient border effect on hover */
+.glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(139, 92, 246, 0.5) 50%,
+            transparent 100%);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.glass-card:hover::before {
+    opacity: 1;
+}

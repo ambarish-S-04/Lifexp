@@ -1,0 +1,268 @@
+.theme-toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+/* Mode Toggle (Sun/Moon) */
+.theme-toggle {
+    position: relative;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.toggle-track {
+    position: relative;
+    width: 60px;
+    height: 32px;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle.dark .toggle-track {
+    background: linear-gradient(135deg,
+            var(--theme-primary, #0f172a) 0%,
+            var(--theme-secondary, #1e293b) 100%);
+    box-shadow:
+        inset 0 2px 10px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(var(--theme-accent-rgb, 139, 92, 246), 0.2);
+}
+
+.theme-toggle.light .toggle-track {
+    background: linear-gradient(135deg,
+            #7dd3fc 0%,
+            #38bdf8 50%,
+            var(--theme-accent, #0ea5e9) 100%);
+    box-shadow:
+        inset 0 2px 10px rgba(255, 255, 255, 0.3),
+        0 0 20px rgba(56, 189, 248, 0.2);
+}
+
+/* Stars */
+.toggle-stars {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 8px;
+    gap: 2px;
+}
+
+.star {
+    color: #fef08a;
+    font-size: 8px;
+    filter: drop-shadow(0 0 3px #fef08a);
+    animation: twinkle 2s infinite ease-in-out;
+}
+
+.star:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+.star:nth-child(3) {
+    animation-delay: 1s;
+}
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 0.5;
+        transform: scale(0.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+/* Clouds */
+.toggle-clouds {
+    position: absolute;
+    inset: 0;
+}
+
+.cloud {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+}
+
+.cloud-1 {
+    width: 12px;
+    height: 8px;
+    top: 8px;
+    left: 6px;
+    box-shadow: 6px 2px 0 -1px rgba(255, 255, 255, 0.9);
+}
+
+.cloud-2 {
+    width: 10px;
+    height: 6px;
+    top: 18px;
+    left: 14px;
+    opacity: 0.7;
+}
+
+/* Handle */
+.toggle-handle {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-toggle.dark .toggle-handle {
+    background: linear-gradient(145deg, #e2e8f0, #cbd5e1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.theme-toggle.light .toggle-handle {
+    background: linear-gradient(145deg, #fef08a, #facc15);
+    box-shadow: 0 0 20px rgba(250, 204, 21, 0.6);
+}
+
+.handle-icon {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.handle-icon.sun {
+    color: #f97316;
+}
+
+.handle-icon.moon {
+    color: #64748b;
+}
+
+/* Palette Button */
+.palette-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    color: var(--color-text-secondary);
+    transition: all 0.2s;
+}
+
+.palette-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--theme-accent);
+}
+
+/* Theme Palette Dropdown */
+.theme-palette {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 12px;
+    min-width: 200px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 12px;
+    z-index: 100;
+    box-shadow: var(--shadow-lg);
+}
+
+.palette-header {
+    padding: 4px 8px 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-text-muted);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 8px;
+}
+
+.theme-options {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.theme-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    transition: all 0.2s;
+    width: 100%;
+    text-align: left;
+}
+
+.theme-option:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.theme-option.active {
+    background: rgba(var(--theme-accent-rgb), 0.15);
+}
+
+.theme-preview {
+    display: flex;
+    gap: 2px;
+}
+
+.preview-swatch {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+}
+
+.preview-swatch.dark {
+    border-radius: 4px 0 0 4px;
+}
+
+.preview-swatch.light {
+    border-radius: 0 4px 4px 0;
+}
+
+.theme-name {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--color-text-primary);
+}
+
+.theme-emoji {
+    font-size: 1rem;
+}
+
+.check-icon {
+    color: var(--theme-accent);
+}
+
+/* Backdrop */
+.palette-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+}
+
+/* Hover glow */
+.theme-toggle:hover .toggle-track {
+    transform: translateY(-1px);
+}
