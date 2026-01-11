@@ -424,6 +424,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
             dispatch({ type: 'SET_USER', payload: user });
 
             if (user) {
+                // Set ref FIRST before loading data (so save effect works!)
+                previousUserRef.current = user;
+
                 // Load user data from Firebase
                 const userData = await getUserData(user.uid);
 
@@ -455,9 +458,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
                         },
                     });
                 }
-
-                // Track this user
-                previousUserRef.current = user;
             } else {
                 // User logged out - reset to defaults
                 dispatch({
