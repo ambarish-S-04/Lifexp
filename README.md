@@ -1,73 +1,132 @@
-# React + TypeScript + Vite
+# 🌿 LifeXP - Gamify Your Daily Productivity
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Turn your daily tasks into XP! Complete tasks, earn experience points, level up, and build streaks to stay motivated.
 
-Currently, two official plugins are available:
+**Live Demo:** [https://gamified-daily-progress.web.app](https://gamified-daily-progress.web.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+![LifeXP Banner](https://img.shields.io/badge/LifeXP-Gamify%20Productivity-8B5CF6?style=for-the-badge)
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+### 🎮 Gamification System
+- **XP Points** - Earn experience points for completing tasks
+- **Level Progression** - Level up as you accumulate XP (100 XP per level)
+- **Streak Tracking** - Build daily streaks by staying consistent
+- **XP Penalties** - Lose XP for incomplete tasks or missed deadlines
 
-## Expanding the ESLint configuration
+### 📋 Task Management
+- **Custom Sections** - Create personalized task categories with icons
+- **Flexible XP Values** - Set 10, 15, or 20 XP per task
+- **Timed Deadlines** - Optional deadlines (1-12 hours or end of day)
+- **Deletion Penalties** - Half XP penalty for deleting incomplete tasks
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 📊 Progress Tracking
+- **Activity Calendar** - Visual monthly view showing daily XP earned
+- **Progress Charts** - Bar and line graphs showing XP trends
+- **Negative XP Display** - Red indicators for days with net XP loss
+- **Monthly Stats** - Total XP, average per active day, and active day count
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 🎨 Beautiful UI
+- **Light/Dark Mode** - Toggle between themes
+- **Color Themes** - Choose from 8 accent colors
+- **Animated Backgrounds** - Floating geometric shapes and patterns
+- **Glassmorphism Design** - Modern frosted glass effects
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 🔐 Authentication
+- **Google Sign-In** - Secure authentication via Firebase
+- **Guest Mode** - Try the app without signing up
+- **Data Persistence** - Cloud sync for authenticated users
+- **Account Deletion** - 24-hour delayed account deletion with confirmation
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+- Firebase account (for authentication & database)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/ambarish-S-04/Lifexp.git
+   cd Lifexp
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+   Then fill in your Firebase credentials in `.env`:
+   ```
+   VITE_FIREBASE_API_KEY=your_api_key
+   VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+   VITE_FIREBASE_PROJECT_ID=your_project_id
+   VITE_FIREBASE_STORAGE_BUCKET=your_project.firebasestorage.app
+   VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+   VITE_FIREBASE_APP_ID=your_app_id
+   VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
+   ```
+
+4. **Start development server**
+   ```bash
+   npm run dev
+   ```
+
+5. **Open in browser**
+   Navigate to `http://localhost:5173`
+
+## 📦 Deployment
+
+### Firebase Hosting
+
+1. **Build the app**
+   ```bash
+   npm run build
+   ```
+
+2. **Deploy to Firebase**
+   ```bash
+   npx firebase-tools login
+   npx firebase-tools deploy --only hosting
+   ```
+
+## 🛠️ Tech Stack
+
+- **Frontend:** React 19, TypeScript, Vite
+- **Styling:** CSS with Variables, Framer Motion
+- **Auth & Database:** Firebase (Auth + Firestore)
+- **Icons:** Lucide React
+- **Deployment:** Firebase Hosting
+
+## 📁 Project Structure
+
+```
+src/
+├── components/
+│   ├── features/       # Feature components (TaskSection, Calendar, etc.)
+│   ├── layout/         # Layout components (GlassCard, BottomNav, etc.)
+│   └── ui/             # UI components (XPProgress, StatCard, etc.)
+├── context/            # React Context (AppContext, ThemeContext)
+├── lib/                # Utilities (Firebase config)
+└── App.tsx             # Main application
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📄 License
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+This project is open source and available under the [MIT License](LICENSE).
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🙏 Acknowledgments
+
+- Built with React and Firebase
+- Icons by Lucide React
+- Animations by Framer Motion
+
+---
+
+Made with ❤️ by [Ambarish](https://github.com/ambarish-S-04)
