@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer, useEffect } from 'react';
+import { createContext, useContext, useReducer, useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import type { User } from 'firebase/auth';
 import { onAuthChange, getUserData, saveUserData } from '../lib/firebase';
@@ -415,6 +415,9 @@ const AppContext = createContext<AppContextType | null>(null);
 export function AppProvider({ children }: { children: ReactNode }) {
     const [state, dispatch] = useReducer(appReducer, initialState);
 
+    // Ref to prevent saving during initial auth/data load (prevents overwriting Firebase data)
+    const isInitializingRef = useRef(true);
+
     // Auth listener
     useEffect(() => {
         const unsubscribe = onAuthChange(async (user) => {
@@ -456,6 +459,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
                 // If no userData, the reset above already set clean defaults
             }
             // If no user (logged out), the reset above already set clean defaults
+
+            // Done initializing - allow saves from now on
+            // Use setTimeout to ensure this happens after React processes the state updates
+            setTimeout(() => {
+                isInitializingRef.current = false;
+            }, 500);
         });
 
         return () => unsubscribe();
@@ -463,6 +472,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
     // Save to Firebase when state changes
     useEffect(() => {
+        // Skip saving during initialization to prevent overwriting Firebase data
+        if (isInitializingRef.current) return;
+
         if (state.user && state.isAuthenticated) {
             const saveData = async () => {
                 await saveUserData(state.user!.uid, {
