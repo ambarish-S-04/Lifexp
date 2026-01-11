@@ -418,15 +418,33 @@ export function AppProvider({ children }: { children: ReactNode }) {
     // Track previous user to detect user switches
     const previousUserRef = useRef<User | null>(null);
 
-    // Auth listener - SIMPLIFIED: just load data, don't reset state first
+    // Auth listener
     useEffect(() => {
         const unsubscribe = onAuthChange(async (user) => {
+            // Block save effect during auth changes (MUST be first!)
+            isInitializingRef.current = true;
+
+            // Reset state to defaults when user changes (prevents data leaking between accounts)
+            dispatch({
+                type: 'SET_DATA',
+                payload: {
+                    totalXP: 0,
+                    level: 1,
+                    currentXP: 0,
+                    streak: 0,
+                    sections: DEFAULT_SECTIONS.map(s => ({
+                        ...s,
+                        tasks: s.tasks.map(t => ({ ...t, completed: false }))
+                    })),
+                    history: [],
+                    lastActiveDate: new Date().toISOString().split('T')[0],
+                },
+            });
+
             dispatch({ type: 'SET_USER', payload: user });
 
             if (user) {
-                // Load user data from Firebase
                 const userData = await getUserData(user.uid);
-
                 if (userData) {
                     // User has existing data - load it
                     dispatch({
@@ -440,64 +458,40 @@ export function AppProvider({ children }: { children: ReactNode }) {
                             history: userData.history || [],
                         },
                     });
-                } else {
-                    // New user - set defaults
-                    dispatch({
-                        type: 'SET_DATA',
-                        payload: {
-                            totalXP: 0,
-                            level: 1,
-                            currentXP: 0,
-                            streak: 0,
-                            sections: DEFAULT_SECTIONS,
-                            history: [],
-                            lastActiveDate: new Date().toISOString().split('T')[0],
-                        },
-                    });
                 }
-
-                // Track this user
-                previousUserRef.current = user;
-            } else {
-                // User logged out - reset to defaults
-                dispatch({
-                    type: 'SET_DATA',
-                    payload: {
-                        totalXP: 0,
-                        level: 1,
-                        currentXP: 0,
-                        streak: 0,
-                        sections: DEFAULT_SECTIONS,
-                        history: [],
-                        lastActiveDate: new Date().toISOString().split('T')[0],
-                    },
-                });
-                previousUserRef.current = null;
+                // If no userData, the reset above already set clean defaults
             }
+            // If no user (logged out), the reset above already set clean defaults
+
+            // Done initializing - allow saves from now on
+            // Use setTimeout to ensure this happens after React processes the state updates
+            setTimeout(() => {
+                isInitializingRef.current = false;
+            }, 500);
         });
 
         return () => unsubscribe();
     }, []);
 
-    // PERIODIC SAVE: Save every 10 seconds (not on every state change)
+    // Save to Firebase when state changes
     useEffect(() => {
+        // Only save if user matches the one we loaded data for
         if (!state.user || !previousUserRef.current) return;
         if (state.user.uid !== previousUserRef.current.uid) return;
 
-        const saveInterval = setInterval(async () => {
-            if (state.user && state.isAuthenticated) {
-                await saveUserData(state.user.uid, {
+        if (state.user && state.isAuthenticated) {
+            const saveData = async () => {
+                await saveUserData(state.user!.uid, {
                     totalXP: state.totalXP,
                     level: state.level,
                     streak: state.streak,
                     sections: state.sections,
                     history: state.history,
                 });
-            }
-        }, 10000); // Save every 10 seconds
-
-        return () => clearInterval(saveInterval);
-    }, [state.user, state.isAuthenticated, state.totalXP, state.level, state.streak, state.sections, state.history]);
+            };
+            saveData();
+        }
+    }, [state.totalXP, state.sections, state.user, state.isAuthenticated, state.level, state.streak, state.history]);
 
     // Check for day change and apply penalty for incomplete tasks
     useEffect(() => {
